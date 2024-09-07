@@ -86,12 +86,10 @@ def evaluate_model(model, X_test, Y_test, category_names):
     print("Accuracy:", accuracy_score(Y_test.values, y_pred))
     print("Classification Report:\n", classification_report(Y_test.values, y_pred, target_names=category_names))
 
-
 def save_model(model, model_filepath):
-    filename = 'disaster_response_model.sav'
+    filename = 'classifier.pkl'
     pickle.dump(model_filepath, open(model_filepath, 'wb'))
-
-
+    
 def main():
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
