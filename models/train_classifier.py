@@ -66,6 +66,7 @@ def tokenize(text):
 
 
 def build_model():
+    # create a model that will be used to train our data to make predictions
     model = Pipeline([
     ('features', FeatureUnion([
 
@@ -75,20 +76,28 @@ def build_model():
         ])),
         ('starting_verb', StartingVerbExtractor())
     ])),
-    ('clf', xgb.XGBClassifier())
-
+    ('clf',MultiOutputClassifier(RandomForestClassifier()))
 ])
-    return model
+    parameters ={
+        'clf__estimator__n_estimators': [5, 10, 20 ],
+        'clf__estimator__min_samples_split': [1, 2, 4]
+}
+
+    # create grid search object
+    cv = GridSearchCV(model, param_grid=parameters)
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    # make a predition
     y_pred = model.predict(X_test)
+    # evaluate results
     print("Accuracy:", accuracy_score(Y_test.values, y_pred))
     print("Classification Report:\n", classification_report(Y_test.values, y_pred, target_names=category_names))
 
 def save_model(model, model_filepath):
-    filename = 'classifier.pkl'
-    pickle.dump(model_filepath, open(model_filepath, 'wb'))
+    # save the model as a file
+    pickle.dump(model, open(model_filepath, 'wb'))
     
 def main():
     if len(sys.argv) == 3:

@@ -40,10 +40,24 @@ model = joblib.load("../models/classifier.pkl")
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
-    
+
+    # Visualize top 10 categories
+    cat = df.iloc[:,4:]
+    cat_sum = cat.sum(numeric_only = True).sort_values(ascending = False)
+    # select top 10
+    cat_sum_top_10 = cat_sum[1:10]
+    y_top10 = list(cat_sum_top_10.values)
+    x_top10 = list(cat_sum_top_10.index)
+
+    cat_sum1 = cat.sum(numeric_only = True).sort_values(ascending = True)
+    # select least 10
+    cat_sum_least_10 = cat_sum1[1:10]
+    y_least10 = list(cat_sum_least_10.values)
+    x_least10 = list(cat_sum_least_10.index)
+
+
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -62,6 +76,45 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        # graph 2
+         {
+            'data': [
+                Bar(
+                    x=x_top10,
+                    y=y_top10
+                )
+            ],
+
+            'layout': {
+                'title': 'Top 10 Message Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Category"
+                }
+            }
+        },
+
+        # graph 3
+         {
+            'data': [
+                Bar(
+                    x=x_least10,
+                    y=y_least10
+                )
+            ],
+
+            'layout': {
+                'title': 'Least 10 Message Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Category"
                 }
             }
         }
