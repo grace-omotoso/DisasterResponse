@@ -57,6 +57,10 @@ def clean_data(df):
   # concatenate the original dataframe with the new `categories` dataframe
   df = pd.concat([df, categories], axis=1, sort=False)
 
+  # drop columns with non binary values
+  valid_vals = [0, 1]
+  df = df[df['related'].isin(valid_vals)]
+
   # drop duplicate
   df = df.drop_duplicates()
 

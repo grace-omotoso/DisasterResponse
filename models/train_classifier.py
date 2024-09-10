@@ -37,9 +37,6 @@ def load_data(database_filepath):
     engine = create_engine('sqlite:///'+database_filepath)
     df = pd.read_sql_table('disaster_response', engine)
 
-    # drop columns with non binary values
-    valid_vals = [0, 1]
-    df = df[df['related'].isin(valid_vals)]
     X = df['message']
     y = df.iloc[:,4:]
     category_names = y.columns.values
